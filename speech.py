@@ -45,12 +45,13 @@ def assistant(data):
         speak(ctime())
 
     if "Google" in data:
-        search = data[data.index(" ")+1:]
-        speak("Hold on, I will search " + search)
-        urL='https://www.google.com/search?q=' + search
-        chrome_path="C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe"
-        webbrowser.register('chrome', None,webbrowser.BackgroundBrowser(chrome_path),1)
-        webbrowser.get('chrome').open_new_tab(urL)
+        if(len(data)>6):
+            search = data[data.index(" ")+1:]
+            speak("Hold on, I will search " + search)
+            urL='https://www.google.com/search?q=' + search
+            chrome_path="C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe"
+            webbrowser.register('chrome', None,webbrowser.BackgroundBrowser(chrome_path),1)
+            webbrowser.get('chrome').open_new_tab(urL)
 
     if "stop" in data:
         speak("stopping assistant")
@@ -63,3 +64,4 @@ speak("Hi, what can I do for you?")
 while 1:
     response = recordAudio()
     assistant(response)
+    speak("Anything else?")
