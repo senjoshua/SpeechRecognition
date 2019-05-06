@@ -8,6 +8,7 @@ from gtts import gTTS
 from playsound import playsound
 import os
 import random
+import webbrowser
 
 def speak(audioString):
     # Text to Speech with Google Text to Speech
@@ -40,15 +41,20 @@ def recordAudio():
     return response
 
 def assistant(data):
-    if(data != ""):
-        speak(data)
+    if "what time is it" in data:
+        speak(ctime())
 
-    # if "what time is it" in data:
-    #     speak(ctime())
+    if "Google" in data:
+        search = data[data.index(" ")+1:]
+        speak("Hold on, I will search " + search)
+        urL='https://www.google.com/search?q=' + search
+        chrome_path="C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe"
+        webbrowser.register('chrome', None,webbrowser.BackgroundBrowser(chrome_path),1)
+        webbrowser.get('chrome').open_new_tab(urL)
 
-    # if "stop" in data:
-    #     speak("stopping assistant")
-    #     exit
+    if "stop" in data:
+        speak("stopping assistant")
+        exit()
 
 
 # initialization
