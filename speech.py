@@ -6,13 +6,19 @@ from time import ctime
 import time
 from gtts import gTTS
 from playsound import playsound
+import os
+import random
 
 def speak(audioString):
     # Text to Speech with Google Text to Speech
     print(audioString)
     tts = gTTS(text=audioString, lang='en')
-    tts.save("audio.mp3")
-    playsound("audio.mp3")
+    rand = random.randint(1,1000)
+    filename = "audio" + str(rand) + ".mp3"
+    tts.save(filename)
+    playsound(filename)
+    os.remove(filename)
+
 
 def recordAudio():
     # Record Audio
@@ -34,12 +40,15 @@ def recordAudio():
     return response
 
 def assistant(data):
-    if "what time is it" in data:
-        speak(ctime())
+    if(data != ""):
+        speak(data)
 
-    if "stop" in data:
-        speak("stopping assistant")
-        exit
+    # if "what time is it" in data:
+    #     speak(ctime())
+
+    # if "stop" in data:
+    #     speak("stopping assistant")
+    #     exit
 
 
 # initialization
