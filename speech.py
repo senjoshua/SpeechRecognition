@@ -9,6 +9,8 @@ from playsound import playsound
 import os
 import random
 import webbrowser
+import re
+import subprocess
 
 def speak(audioString):
     # Text to Speech with Google Text to Speech
@@ -44,19 +46,30 @@ def assistant(data):
     if "what time is it" in data:
         speak(ctime())
 
-    if "Google" in data:
-        if(len(data)>6):
-            search = data[data.index(" ")+1:]
+    elif "Google" in data:
+        reg_ex = re.search("Google (.+)", data)
+        if reg_ex:
+            search = reg_ex.group(1)
             speak("Hold on, I will search " + search)
             urL='https://www.google.com/search?q=' + search
             chrome_path="C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe"
             webbrowser.register('chrome', None,webbrowser.BackgroundBrowser(chrome_path),1)
             webbrowser.get('chrome').open_new_tab(urL)
 
-    if "stop" in data:
+    elif "open" in data:
+        reg_ex = re.search("open (.+)", data)
+        if reg_ex:
+            domain = reg_ex.group(1)
+            speak("Hold on, I will open " + domain)
+            url = "https://www." + domain + ".com"
+            webbrowser.open(url)
+
+    elif "stop" in data:
         speak("stopping assistant")
         exit()
 
+    else:
+        speak("sorry I cannot help you with that")
 
 # initialization
 time.sleep(2)
