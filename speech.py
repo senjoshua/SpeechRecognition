@@ -11,6 +11,9 @@ import random
 import webbrowser
 import re
 import subprocess
+from bs4 import BeautifulSoup as soup
+import urllib
+from urllib.request import urlopen
 
 def speak(audioString):
     # Text to Speech with Google Text to Speech
@@ -63,6 +66,28 @@ def assistant(data):
             speak("Hold on, I will open " + domain)
             url = "https://www." + domain + ".com"
             webbrowser.open(url)
+
+    elif 'launch' in data:
+        reg_ex = re.search('launch (.*)', data)
+        if reg_ex:
+            appname = reg_ex.group(1)
+            # appname1 = appname+".app"
+            speak("Hold on, I will launch " + appname)
+            # subprocess.Popen(["open", "-n", "/Applications/" + appname1], stdout=subprocess.PIPE)
+
+    elif 'news' in data:
+        try:
+            news_url="https://news.google.com/news/rss"
+            Client=urlopen(news_url)
+            xml_page=Client.read()
+            Client.close()
+            soup_page=soup(xml_page,"xml")
+            news_list=soup_page.findAll("item")
+            for news in news_list[:5]:
+                # print(news.title.text)
+                speak(news.title.text)
+        except Exception as e:
+                print(e)
 
     elif "stop" in data:
         speak("stopping assistant")
