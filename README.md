@@ -6,4 +6,6 @@ Features:
 - [X] Google Search
 - [X] Open website
 - [X] News
+- [X] Set user's name
+- [X] Current weather
 - [X] Stopping Assistant
