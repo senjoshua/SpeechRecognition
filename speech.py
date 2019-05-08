@@ -14,6 +14,7 @@ import subprocess
 from bs4 import BeautifulSoup as soup
 import urllib
 from urllib.request import urlopen
+from pyowm import OWM
 
 def speak(audioString):
     # Text to Speech with Google Text to Speech
@@ -99,6 +100,17 @@ def assistant(data):
             file.write(callname)
             file.close()
             speak("Ok, I will call you " + callname)
+
+    elif 'weather' in data:
+        reg_ex = re.search('weather in (.*)', data)
+        if reg_ex:
+            city = reg_ex.group(1)
+            owm = OWM(API_key='ab0d5e80e8dafb2cb81fa9e82431c1fa')
+            obs = owm.weather_at_place(city)
+            w = obs.get_weather()
+            k = w.get_status()
+            x = w.get_temperature('fahrenheit')
+            speak('Current weather in %s is %s. The high for today is %0.2f and the low is %0.2f degrees fahrenheit' % (city, k, x['temp_max'], x['temp_min']))
 
 
     elif "stop" in data:
