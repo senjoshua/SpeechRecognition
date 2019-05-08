@@ -89,6 +89,18 @@ def assistant(data):
         except Exception as e:
                 print(e)
 
+    elif "call me" in data:
+        reg_ex = re.search("call me (.+)", data)
+        if reg_ex:
+            global name
+            callname = reg_ex.group(1)
+            name = callname
+            file = open("name.txt","w+") 
+            file.write(callname)
+            file.close()
+            speak("Ok, I will call you " + callname)
+
+
     elif "stop" in data:
         speak("stopping assistant")
         exit()
@@ -98,8 +110,12 @@ def assistant(data):
 
 # initialization
 time.sleep(2)
-speak("Hi, what can I do for you?")
+name = ""
+file = open("name.txt","r") 
+name = file.read()
+file.close()
+speak("Hi, what can I do for you " + name + "?")
 while 1:
     response = recordAudio()
     assistant(response)
-    speak("Anything else?")
+    speak("Anything else " + name + "?")
